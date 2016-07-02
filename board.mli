@@ -15,5 +15,7 @@ val set  : t -> x:int -> y:int -> Mark.t -> unit Or_error.t
 val fset : t -> x:int -> y:int -> Mark.t -> t    Or_error.t
 
 val eval : t -> player:Mark.t -> int
+val is_end : t -> bool
+val winner : t -> Mark.t option
 
 val to_string : t -> string
