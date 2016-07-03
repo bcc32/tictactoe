@@ -15,10 +15,10 @@ let get_valid_xy prompt size : int * int =
     |> function
     | Ok (x, y) when in_bounds size x y -> x, y
     | Ok (x, y) ->
-      eprintf "(%d, %d) is out of bounds.\n" x y;
+      printf "(%d, %d) is out of bounds.\n" x y;
       loop ()
     | Error e ->
-      eprintf "%s\n" (Error.to_string_hum e);
+      printf "%s\n" (Error.to_string_hum e);
       loop ()
   in
   loop ()
