@@ -21,3 +21,6 @@ let play =
     [ "2p", two_player
     ; "1p", versus_cpu
     ]
+
+let () =
+  Command.run play
