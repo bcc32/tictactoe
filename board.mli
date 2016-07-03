@@ -1,9 +1,7 @@
 open Core.Std
 
 module Mark : sig
-  type t =
-    | X
-    | O
+  type t = X | O
   [@@deriving bin_io, sexp]
 
   val to_string : t -> string

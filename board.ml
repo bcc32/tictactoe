@@ -1,9 +1,7 @@
 open Core.Std
 
 module Mark = struct
-  type t =
-    | X
-    | O
+  type t = X | O
   [@@deriving bin_io, sexp]
 
   let to_string t =
@@ -20,7 +18,7 @@ end
 type t = Mark.t option array array
 [@@deriving bin_io, sexp]
 
-exception More_than_one_winner
+exception Multiple_winners
 
 let create n =
   Array.make_matrix None ~dimx:n ~dimy:n
@@ -42,8 +40,8 @@ let fset t ~x ~y mark =
   match t.(x).(y) with
   | Some _ -> already_occupied x y
   | None ->
-    let rows = Array.copy t in
-    let row = Array.copy t.(x) in
+    let rows = Array.copy t     in
+    let row  = Array.copy t.(x) in
     rows.(x) <- row;
     row.(y) <- Some mark;
     Ok rows
@@ -88,20 +86,23 @@ let winner t =
     then line.(0)
     else None
   in
-  let t' = Array.transpose_exn t in
-  let winners =
-    Array.concat
-      [ Array.filter_map ~f:line_winner t
-      ; Array.filter_map ~f:line_winner t'
-      ; Array.filter_map ~f:line_winner [| lr_diag t |]
-      ; Array.filter_map ~f:line_winner [| rl_diag t |]
-      ]
+  let line_winners lines =
+    Array.filter_map lines ~f:line_winner
     |> Array.to_list
+  in
+  let winners =
+    [ t
+    ; Array.transpose_exn t
+    ; [| lr_diag t |]
+    ; [| rl_diag t |]
+    ]
+    |> List.map ~f:line_winners
+    |> List.concat_no_order
   in
   match List.dedup winners with
   | [w] -> Some w
   | []  -> None
-  | _   -> raise More_than_one_winner
+  | _   -> raise Multiple_winners
 
 let is_end t =
   Option.is_some (winner t)
