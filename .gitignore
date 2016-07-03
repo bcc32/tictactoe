@@ -1,0 +1,4 @@
+# Corebuild artifacts
+_build
+
+.DS_Store
