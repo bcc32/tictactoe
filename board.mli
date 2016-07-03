@@ -5,6 +5,9 @@ module Mark : sig
     | X
     | O
   [@@deriving bin_io, sexp]
+
+  val to_string : t -> string
+  val next      : t -> t
 end
 
 type t [@@deriving bin_io, sexp]

@@ -10,6 +10,11 @@ module Mark = struct
     match t with
     | X -> "X"
     | O -> "O"
+
+  let next t =
+    match t with
+    | X -> O
+    | O -> X
 end
 
 type t = Mark.t option array array
