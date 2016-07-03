@@ -35,8 +35,11 @@ let two_player =
         printf !"%{Board}\n" board;
         if Board.is_end board
         then (
-          let winner = Board.winner board |> Option.value_exn in
-          printf !"%{Board.Mark} wins!\n" winner
+          match Board.winner board with
+          | Some winner ->
+            printf !"%{Board.Mark} wins!\n" winner
+          | None ->
+            printf "The only winning move is not to play...\n"
         ) else (
           let prompt = sprintf !"%{Board.Mark}'s move: " player in
           let x, y = get_valid_xy prompt size in

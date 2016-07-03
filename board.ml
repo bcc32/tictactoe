@@ -82,8 +82,10 @@ let to_string t =
 
 let winner t =
   let line_winner line =
-    if Array.for_all line ~f:Option.is_some
-    then line.(0)
+    if Array.for_all line ~f:((=) (Some Mark.X))
+    then Some Mark.X
+    else if Array.for_all line ~f:((=) (Some Mark.O))
+    then Some Mark.O
     else None
   in
   let line_winners lines =
@@ -106,3 +108,4 @@ let winner t =
 
 let is_end t =
   Option.is_some (winner t)
+  || Array.for_all t ~f:(Array.for_all ~f:Option.is_some)
